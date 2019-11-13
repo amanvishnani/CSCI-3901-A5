@@ -17,6 +17,7 @@ public class ReportGenerator {
     public ReportGenerator(ReportParams params) {
         this.reports.add(new CustomerReport(params));
         this.reports.add(new ProductReport(params));
+        this.reports.add(new StaffReport(params));
         System.out.println(generate(params));
     }
 
@@ -52,16 +53,17 @@ public class ReportGenerator {
 
     public static String formatXml(String xml) {
         try {
-            final InputSource src = new InputSource(new StringReader(xml));
-            final Node document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(src).getDocumentElement();
+            final InputSource inputSource = new InputSource(new StringReader(xml));
+            final Node documentElement = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                                        .parse(inputSource ).getDocumentElement();
             final DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
             final DOMImplementationLS impl = (DOMImplementationLS) registry.getDOMImplementation("LS");
-            final LSSerializer writer = impl.createLSSerializer();
+            final LSSerializer lsSerializer = impl.createLSSerializer();
 
-            writer.getDomConfig().setParameter("format-pretty-print", true);
-            writer.getDomConfig().setParameter("xml-declaration", true);
+            lsSerializer.getDomConfig().setParameter("format-pretty-print", true);
+            lsSerializer.getDomConfig().setParameter("xml-declaration", true);
 
-            return writer.writeToString(document);
+            return lsSerializer.writeToString(documentElement);
         } catch (Exception e) {
             return xml;
         }

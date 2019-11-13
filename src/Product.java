@@ -2,7 +2,14 @@ public class Product implements Xml {
     private String productName;
     private String productVendor;
     private Integer unitsSold;
-    private Integer totalSales;
+    private Double totalSales;
+
+    public Product(String productName, String productVendor, Integer unitsSold, Double totalSales) {
+        this.productName = productName;
+        this.productVendor = productVendor;
+        this.unitsSold = unitsSold;
+        this.totalSales = totalSales;
+    }
 
     @Override
     public String toXML() {

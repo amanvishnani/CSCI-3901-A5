@@ -3,5 +3,5 @@
  * Interface for any class that implements XML serialization.
  */
 public interface Xml {
-    public String toXML();
+    String toXML();
 }

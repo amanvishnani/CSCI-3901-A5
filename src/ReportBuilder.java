@@ -3,8 +3,10 @@ import org.w3c.dom.bootstrap.DOMImplementationRegistry;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -28,6 +30,11 @@ public class ReportBuilder {
         return this;
     }
 
+    /**
+     * Adds {@link Report} to the list of reports.
+     * @param report the report to be added.
+     * @return Report builder object for chaining.
+     */
     public ReportBuilder addReport(Report report) {
         report.setParams(this.params);
         this.reports.add(report);
@@ -35,7 +42,7 @@ public class ReportBuilder {
     }
 
     /**
-     * Builds the report based on configuration and Prints it to the Output File.
+     * Builds the {@link Report} based on configuration and Prints it to the Output File.
      * @return true if the report was built successfully.
      */
     public boolean build() {
@@ -47,7 +54,9 @@ public class ReportBuilder {
         for (Report report:
              reports) {
             try {
+                // Build every report
                 report.build();
+                // Append result of report to report content
                 reportContent.append(report.toXML());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -57,8 +66,11 @@ public class ReportBuilder {
         try {
             OutputStreamWriter fw;
             fw = new OutputStreamWriter(new FileOutputStream(params.outputFileName), StandardCharsets.UTF_16);
+            // Create final XML
             String output = String.format(xml, reportContent.toString());
+            // Format final XML
             output = formatXml(output);
+            // Write XML to file.
             fw.write(output);
             fw.flush();
             fw.close();
@@ -69,21 +81,51 @@ public class ReportBuilder {
         return true;
     }
 
+    /**
+     * Formats XML into a Human Readable form.
+     * @param xml unformatted xml text
+     * @return formatted xml text
+     */
     public static String formatXml(String xml) {
         try {
-            final InputSource inputSource = new InputSource(new StringReader(xml));
-            final Node documentElement = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-                                        .parse(inputSource ).getDocumentElement();
-            final DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
-            final DOMImplementationLS impl = (DOMImplementationLS) registry.getDOMImplementation("LS");
-            final LSSerializer lsSerializer = impl.createLSSerializer();
-
-            lsSerializer.getDomConfig().setParameter("format-pretty-print", true);
-            lsSerializer.getDomConfig().setParameter("xml-declaration", true);
-
-            return lsSerializer.writeToString(documentElement);
+            Node xmlDocument = getXmlDocument(xml);
+            LSSerializer lsSerializer = getSerializer();
+            return lsSerializer.writeToString(xmlDocument);
         } catch (Exception e) {
             return xml;
         }
+    }
+
+    /**
+     * Converts XML String to a {@link Node} object.
+     * @param xml the unformatted xml string.
+     * @return {@link Node} object
+     * @throws ParserConfigurationException
+     * @throws IOException
+     * @throws SAXException
+     */
+    public static Node getXmlDocument(String xml) throws ParserConfigurationException, IOException, SAXException {
+        InputSource inputSource = new InputSource(new StringReader(xml));
+        Node documentElement;
+        documentElement = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                    .parse(inputSource ).getDocumentElement();
+        return documentElement;
+    }
+
+    /**
+     * Provides DOM Serializer
+     * @return the Serializer for XML
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws ClassNotFoundException
+     */
+    public static LSSerializer getSerializer() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+        DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
+        DOMImplementationLS impl = (DOMImplementationLS) registry.getDOMImplementation("LS");
+        LSSerializer lsSerializer = impl.createLSSerializer();
+
+        lsSerializer.getDomConfig().setParameter("format-pretty-print", true);
+        lsSerializer.getDomConfig().setParameter("xml-declaration", true);
+        return lsSerializer;
     }
 }

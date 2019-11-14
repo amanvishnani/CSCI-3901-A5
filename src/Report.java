@@ -55,8 +55,5 @@ public abstract class Report implements Xml {
         this.tag = tag;
     }
 
-    @Override
-    abstract public String toXML();
-
     abstract public void build() throws SQLException;
 }

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 /**
  * @author Aman Vishnani (aman.vishnani@dal.ca)
  * Staff Report Class.
- * Extends @Report stub.
+ * Extends {@link Report} stub.
  */
 public class StaffReport extends Report {
 

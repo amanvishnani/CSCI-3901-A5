@@ -1,4 +1,3 @@
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,14 +5,14 @@ import java.sql.SQLException;
 /**
  * @author Aman Vishnani (aman.vishnani@dal.ca)
  * Customer Report Class.
- * Extends @Report stub.
+ * Extends {@link Report} stub.
  */
 public class CustomerReport extends Report {
 
     // SQL Query for the report.
     private static final String SQL = "" +
             "SELECT c.customername                         AS customerName, \n" +
-            "       Concat(c.addressline1, c.addressline2) AS streetAdderess, \n" +
+            "       c.addressline1                         AS streetAdderess, \n" +
             "       c.city                                 AS city, \n" +
             "       c.postalcode                           AS postalCode, \n" +
             "       c.country                              AS country, \n" +

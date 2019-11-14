@@ -2,7 +2,7 @@ import java.sql.Connection;
 
 /**
  * @author Aman Vishnani (aman.vishnani@dal.ca)
- * Report Parameters class.
+ * {@link Report} Parameters class.
  */
 public class ReportParams {
     String startDateStr;

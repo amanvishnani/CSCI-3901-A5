@@ -3,8 +3,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
+/**
+ * @author Aman Vishnani (aman.vishnani@dal.ca)
+ * Staff Report Class.
+ * Extends @Report stub.
+ */
 public class StaffReport extends Report {
 
+    // SQL Query for the report.
     private static final String SQL = "" +
             "SELECT employeenumber, \n" +
             "       firstname, \n" +
@@ -24,14 +31,9 @@ public class StaffReport extends Report {
 
 
     private XmlList<Employee> staffList;
-    private String startDate, endDate;
-    private Connection connection;
 
-    public StaffReport(ReportParams params) {
+    public StaffReport() {
         this.setTag("staff_list");
-        this.startDate = params.getStartDateStr();
-        this.endDate = params.getEndDateStr();
-        this.connection = params.getConnection();
         staffList = new XmlList<>(this.getTag());
     }
 
@@ -40,15 +42,19 @@ public class StaffReport extends Report {
         return staffList.toXML();
     }
 
+    /**
+     * Builds the report and persists in the object.
+     * @throws SQLException
+     */
     @Override
     public void build() throws SQLException {
         if(!staffList.isEmpty()) {
             System.out.println("Warning: Staff List Report is already populated, recalculating.");
             staffList = new XmlList<>(this.getTag());
         }
-        PreparedStatement statement = connection.prepareStatement(SQL);
-        statement.setString(1, startDate);
-        statement.setString(2, endDate);
+        PreparedStatement statement = getConnection().prepareStatement(SQL);
+        statement.setString(1, getStartDate());
+        statement.setString(2, getEndDate());
         ResultSet rs = statement.executeQuery();
         while (rs.next()) {
             Employee employee = new Employee(rs.getString(2), rs.getString(3),

@@ -1,3 +1,7 @@
+/**
+ * @author Aman Vishnani (aman.vishnani@dal.ca)
+ * Year Model Class.
+ */
 public class Year implements Xml {
 
     private String startDate;

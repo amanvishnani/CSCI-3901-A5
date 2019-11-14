@@ -11,17 +11,35 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReportGenerator {
-    List<Report> reports = new ArrayList<>();
+/**
+ * @author Aman Vishnani (aman.vishnani@dal.ca)
+ * ReportBuilder Class.
+ * Generates XML report and returns formatted XML
+ */
+public class ReportBuilder {
 
-    public ReportGenerator(ReportParams params) {
-        this.reports.add(new CustomerReport(params));
-        this.reports.add(new ProductReport(params));
-        this.reports.add(new StaffReport(params));
-        System.out.println(generate(params));
+    private List<Report> reports = new ArrayList<>();
+    private ReportParams params;
+
+    public ReportBuilder() {
     }
 
-    public boolean generate(ReportParams params) {
+    public ReportBuilder withParams(ReportParams params) {
+        this.params = params;
+        return this;
+    }
+
+    public ReportBuilder addReport(Report report) {
+        report.setParams(this.params);
+        this.reports.add(report);
+        return this;
+    }
+
+    /**
+     * Builds the report based on configuration and Prints it to the Output File.
+     * @return true if the report was built successfully.
+     */
+    public boolean build() {
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
                     "<year_end_summary> %s </year_end_summary>";
         Year year = new Year(params.getStartDateStr(), params.getEndDateStr());

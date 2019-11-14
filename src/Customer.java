@@ -1,3 +1,7 @@
+/**
+ * @author Aman Vishnani (aman.vishnani@dal.ca)
+ * Customer Model Class.
+ */
 public class Customer implements Xml {
 
     private String customerName;

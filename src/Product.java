@@ -1,3 +1,7 @@
+/**
+ * @author Aman Vishnani (aman.vishnani@dal.ca)
+ * Product Model Class.
+ */
 public class Product implements Xml {
     private String productName;
     private String productVendor;

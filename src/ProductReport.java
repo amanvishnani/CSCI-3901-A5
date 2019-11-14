@@ -1,11 +1,15 @@
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.Period;
 
+/**
+ * @author Aman Vishnani (aman.vishnani@dal.ca)
+ * Product Report Class.
+ * Extends @Report stub.
+ */
 public class ProductReport extends Report {
 
+    // SQL Query for the report.
     private static final String SQL = "" +
             "SELECT p.productline, \n" +
             "       p.productname, \n" +
@@ -21,14 +25,9 @@ public class ProductReport extends Report {
             "          3; ";
 
     private XmlList<XmlObject> productList;
-    private String startDate, endDate;
-    private Connection connection;
 
-    public ProductReport(ReportParams params) {
+    public ProductReport() {
         this.setTag("product_list");
-        this.startDate = params.getStartDateStr();
-        this.endDate = params.getEndDateStr();
-        this.connection = params.getConnection();
         productList = new XmlList<>(this.getTag());
     }
 
@@ -37,11 +36,15 @@ public class ProductReport extends Report {
         return productList.toXML();
     }
 
+    /**
+     * Builds the report and persists in the object.
+     * @throws SQLException
+     */
     @Override
     public void build() throws SQLException {
-        PreparedStatement stmt = connection.prepareStatement(SQL);
-        stmt.setString(1, startDate);
-        stmt.setString(2, endDate);
+        PreparedStatement stmt = getConnection().prepareStatement(SQL);
+        stmt.setString(1, getStartDate());
+        stmt.setString(2, getEndDate());
         ResultSet set = stmt.executeQuery();
         while (set.next()) {
             XmlObject object = new XmlObject("product_set");

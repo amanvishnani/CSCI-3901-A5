@@ -1,3 +1,7 @@
+/**
+ * @author Aman Vishnani (aman.vishnani@dal.ca)
+ * Employee Model Class.
+ */
 public class Employee implements Xml{
 
     private String firstName;

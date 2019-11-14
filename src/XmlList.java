@@ -1,5 +1,11 @@
 import java.util.ArrayList;
 
+/**
+ * @author Aman Vishnani (aman.vishnani@dal.ca)
+ * XmlList.
+ * Stores a list of objects which implements @Xml interface.
+ * Emulates XML Arrays
+ */
 public class XmlList<T extends Xml> implements Xml {
 
     private String tag = "list";

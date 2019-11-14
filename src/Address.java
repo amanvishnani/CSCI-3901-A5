@@ -1,3 +1,7 @@
+/**
+ * @author Aman Vishnani (aman.vishnani@dal.ca)
+ * Address Model Class.
+ */
 public class Address implements Xml {
 
     private String streetAddress;

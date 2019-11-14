@@ -3,8 +3,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * @author Aman Vishnani (aman.vishnani@dal.ca)
+ * Customer Report Class.
+ * Extends @Report stub.
+ */
 public class CustomerReport extends Report {
 
+    // SQL Query for the report.
     private static final String SQL = "" +
             "SELECT c.customername                         AS customerName, \n" +
             "       Concat(c.addressline1, c.addressline2) AS streetAdderess, \n" +
@@ -20,15 +26,10 @@ public class CustomerReport extends Report {
             "GROUP  BY 1; ";
 
     private XmlList<Customer> customerXmlList;
-    private String startDate, endDate;
-    private Connection connection;
 
 
-    public CustomerReport(ReportParams params) {
+    public CustomerReport() {
         this.setTag("customer_list");
-        this.startDate = params.getStartDateStr();
-        this.endDate = params.getEndDateStr();
-        this.connection = params.getConnection();
         customerXmlList = new XmlList<>(this.getTag());
     }
 
@@ -45,9 +46,9 @@ public class CustomerReport extends Report {
             customerXmlList = new XmlList<>(this.getTag());
         }
 
-        PreparedStatement statement = connection.prepareStatement(SQL);
-        statement.setString(1, startDate);
-        statement.setString(2, endDate);
+        PreparedStatement statement = getConnection().prepareStatement(SQL);
+        statement.setString(1, getStartDate());
+        statement.setString(2, getEndDate());
         ResultSet rs = statement.executeQuery();
         while (rs.next()) {
             Address address = new Address(rs.getString(2), rs.getString(3),

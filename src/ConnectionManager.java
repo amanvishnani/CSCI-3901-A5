@@ -1,6 +1,11 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+/**
+ * @author Aman Vishnani (aman.vishnani@dal.ca)
+ *
+ * ConnectionManager class provides JDBC conncetion based on provided configuration.
+ */
 public class ConnectionManager {
     private static String host = "localhost";
     private static String port = "3306";

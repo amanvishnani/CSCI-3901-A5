@@ -5,9 +5,8 @@ import org.w3c.dom.ls.LSSerializer;
 import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringReader;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class ReportBuilder {
      * @return true if the report was built successfully.
      */
     public boolean build() {
-        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-16\" ?>" +
                     "<year_end_summary> %s </year_end_summary>";
         Year year = new Year(params.getStartDateStr(), params.getEndDateStr());
 
@@ -56,7 +55,8 @@ public class ReportBuilder {
             }
         }
         try {
-            FileWriter fw = new FileWriter(params.outputFileName);
+            OutputStreamWriter fw;
+            fw = new OutputStreamWriter(new FileOutputStream(params.outputFileName), StandardCharsets.UTF_16);
             String output = String.format(xml, reportContent.toString());
             output = formatXml(output);
             fw.write(output);

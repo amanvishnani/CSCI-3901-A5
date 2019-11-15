@@ -86,7 +86,7 @@ public class ReportBuilder {
      * @param xml unformatted xml text
      * @return formatted xml text
      */
-    public static String formatXml(String xml) {
+    private static String formatXml(String xml) {
         try {
             Node xmlDocument = getXmlDocument(xml);
             LSSerializer lsSerializer = getSerializer();
@@ -104,7 +104,7 @@ public class ReportBuilder {
      * @throws IOException
      * @throws SAXException
      */
-    public static Node getXmlDocument(String xml) throws ParserConfigurationException, IOException, SAXException {
+    private static Node getXmlDocument(String xml) throws ParserConfigurationException, IOException, SAXException {
         InputSource inputSource = new InputSource(new StringReader(xml));
         Node documentElement;
         documentElement = DocumentBuilderFactory.newInstance().newDocumentBuilder()

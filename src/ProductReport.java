@@ -1,6 +1,9 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author Aman Vishnani (aman.vishnani@dal.ca)
@@ -24,7 +27,7 @@ public class ProductReport extends Report {
             "          2, \n" +
             "          3; ";
 
-    private XmlList<XmlObject> productList;
+    private XmlList<XmlList> productList;
 
     public ProductReport() {
         this.setTag("product_list");
@@ -46,13 +49,23 @@ public class ProductReport extends Report {
         stmt.setString(1, getStartDate());
         stmt.setString(2, getEndDate());
         ResultSet set = stmt.executeQuery();
+        LinkedHashMap<String, ArrayList<Product>> map = new LinkedHashMap<>();
         while (set.next()) {
-            XmlObject object = new XmlObject("product_set");
-            object.addField("product_line_name", set.getString(1));
             Product p = new Product(set.getString(2), set.getString(3),
                     set.getInt(4), set.getDouble(5));
-            object.addField("product", p);
-            productList.add(object);
+            map.computeIfAbsent(set.getString(1), key -> new ArrayList<>());
+            map.get(set.getString(1)).add(p);
+        }
+
+        for (Map.Entry<String, ArrayList<Product>> entry :
+                map.entrySet()) {
+            XmlList<Xml> list = new XmlList<>("product_set");
+            list.add(new XmlUnit("product_line_name", entry.getKey()));
+            for (Product p :
+                    entry.getValue()) {
+                list.add(p);
+            }
+            productList.add(list);
         }
     }
 }

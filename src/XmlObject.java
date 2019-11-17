@@ -46,7 +46,7 @@ public class XmlObject implements Xml {
      * @param string the xml string value.
      * @return the string with escaped ampersand values
      */
-    private static String sanitize(String string) {
+    public static String sanitize(String string) {
         return string.replaceAll("&", "&amp;");
     }
 }

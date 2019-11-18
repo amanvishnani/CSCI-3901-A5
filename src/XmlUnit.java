@@ -1,3 +1,7 @@
+/**
+ * @author Aman Vishnani (aman.vishnani@dal.ca)
+ * Class for any xml object that has one key and one value.
+ */
 public class XmlUnit implements Xml {
     private String key;
     private Object value;
